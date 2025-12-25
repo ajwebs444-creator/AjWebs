@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJ Cheats</title>
+    <!-- Premium Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- Gun Models Loader -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <style>
+        :root {
+            --primary: #00f7ff;
+            --primary-glow: #00f7ffaa;
+            --secondary: #ff0055;
+            --dark-bg: #0a0a16;
+            --darker-bg: #050510;
+            --card-bg: rgba(16, 18, 40, 0.85);
+            --glass: rgba(255, 255, 255, 0.05);
+            --gradient: linear-gradient(135deg, #00f7ff 0%, #ff0055 50%, #9d00ff 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--darker-bg);
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 247, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(255, 0, 85, 0.05) 0%, transparent 20%);
+        }
+
+        /* Hidden Audio Player */
+        .hidden-audio-player {
+            display: none;
+        }
+        
+        /* Audio Controls */
+        .audio-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: var(--card-bg);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid var(--primary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        
+        .audio-controls:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.5);
+        }
+        
+        .audio-controls i {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        /* 3D Guns Background Canvas */
+        #gun-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* Gun Selection UI */
+        .gun-selector {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid var(--primary);
+            backdrop-filter: blur(10px);
+            display: none; /* Hidden by default */
+        }
+
+        .gun-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .gun-btn {
+            background: rgba(0, 247, 255, 0.1);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .gun-btn:hover {
+            background: var(--primary);
+            color: #000;
+        }
+
+        /* Premium Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 22, 0.9);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(0, 247, 255, 0.2);
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .navbar.scrolled {
+            padding: 0.8rem 5%;
+            background: rgba(5, 5, 16, 0.95);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+            animation: spin 10s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: #eee;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+            transition: all 0.3s;
+            padding: 8px 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #fff 30%, var(--primary) 70%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 20px rgba(0, 247, 255, 0.3); }
+            100% { text-shadow: 0 0 30px rgba(0, 247, 255, 0.6), 0 0 60px rgba(255, 0, 85, 0.3); }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #aaa;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--gradient);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0, 247, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 247, 255, 0.4);
+        }
+
+        /* Trust Indicators */
+        .trust-section {
+            padding: 5rem 5%;
+            background: rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .trust-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .trust-card {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(0, 247, 255, 0.1);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .trust-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--gradient);
+            border-radius: 22px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .trust-card:hover::before {
+            opacity: 1;
+        }
+
+        .trust-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .trust-card i {
+            font-size: 3rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Packages Section */
+        .packages-section {
+            padding: 6rem 5%;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 1.2rem;
+            margin-bottom: 4rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .package-card {
+            background: var(--card-bg);
+            border-radius: 25px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            backdrop-filter: blur(10px);
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .package-card:hover {
+            transform: translateY(-20px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.5),
+                0 0 0 1px var(--primary),
+                0 0 30px rgba(0, 247, 255, 0.2);
+        }
+
+        .package-header {
+            background: linear-gradient(90deg, rgba(0, 247, 255, 0.1), rgba(255, 0, 85, 0.1));
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .package-header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            animation: shine 3s infinite linear;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .package-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.05);
+        }
+
+        .package-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .package-content {
+            padding: 2rem;
+        }
+
+        .features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .features li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+        }
+
+        .features li:hover {
+            color: var(--primary);
+            padding-left: 10px;
+        }
+
+        .features li i {
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .package-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: rgba(0, 247, 255, 0.1);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.4s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .package-btn:hover {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 30px rgba(0, 247, 255, 0.5);
+        }
+
+        /* Social Links */
+        .social-section {
+            padding: 5rem 5%;
+            text-align: center;
+        }
+
+        .social-grid {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .social-card {
+            width: 180px;
+            height: 180px;
+            background: var(--card-bg);
+            border-radius: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-card::before {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: skewX(-20deg);
+            left: -150%;
+            top: 0;
+            transition: 0.8s;
+        }
+
+        .social-card:hover::before {
+            left: 150%;
+        }
+
+        .social-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .social-card.instagram {
+            border-color: #E1306C;
+        }
+
+        .social-card.telegram {
+            border-color: #0088cc;
+        }
+
+        .social-card.whatsapp {
+            border-color: #25D366;
+        }
+
+        .social-card i {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .social-card.instagram i { color: #E1306C; }
+        .social-card.telegram i { color: #0088cc; }
+        .social-card.whatsapp i { color: #25D366; }
+
+        /* Footer */
+        .footer {
+            padding: 4rem 5%;
+            background: rgba(5, 5, 16, 0.95);
+            border-top: 1px solid rgba(0, 247, 255, 0.1);
+            margin-top: 5rem;
+            text-align: center;
+        }
+
+        .disclaimer {
+            background: linear-gradient(90deg, #ff0055, #9d00ff);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 3rem;
+            animation: pulse 2s infinite;
+            box-shadow: 0 10px 30px rgba(255, 0, 85, 0.2);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 10px 30px rgba(255, 0, 85, 0.2); }
+            50% { box-shadow: 0 10px 40px rgba(255, 0, 85, 0.4); }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            padding: 2rem;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            max-width: 900px;
+            margin: 3rem auto;
+            border-radius: 30px;
+            border: 1px solid var(--primary);
+            overflow: hidden;
+            animation: modalOpen 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 40px 80px rgba(0, 247, 255, 0.2);
+        }
+
+        @keyframes modalOpen {
+            from { opacity: 0; transform: scale(0.8) translateY(-50px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-header {
+            background: linear-gradient(90deg, rgba(0, 247, 255, 0.1), rgba(255, 0, 85, 0.1));
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal:hover {
+            transform: rotate(90deg);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Purchase Form Styles */
+        .purchase-form {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(0, 247, 255, 0.2);
+        }
+
+        .purchase-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(90deg, #25D366, #128C7E);
+            border: none;
+            color: white;
+            border-radius: 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.4s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .purchase-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+        }
+
+        /* Video Container Styles */
+        .video-container {
+            background: #000;
+            border-radius: 20px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--primary);
+        }
+
+        .video-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .video-header i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .video-header h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .youtube-player {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 15px;
+            background: #111;
+        }
+
+        .youtube-player iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
+            background: #111;
+            border-radius: 15px;
+            gap: 1rem;
+        }
+
+        .play-icon {
+            width: 80px;
+            height: 80px;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .play-icon:hover {
+            background: rgba(0, 247, 255, 0.1);
+            transform: scale(1.1);
+        }
+
+        .play-icon i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-left: 5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero h1 { font-size: 3.5rem; }
+            .packages-grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+            .nav-links { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.8rem; }
+            .section-title { font-size: 2.8rem; }
+            .social-grid { gap: 1rem; }
+            .social-card { width: 150px; height: 150px; }
+            .audio-controls { bottom: 15px; right: 15px; }
+            .modal-content { margin: 1rem auto; }
+        }
+
+        /* Animation for other elements */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Gun Controls Toggle */
+        .gun-controls-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: var(--primary);
+            color: #000;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.3);
+            transition: all 0.3s;
+        }
+
+        .gun-controls-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hidden Audio Element -->
+    <audio id="backgroundMusic" loop class="hidden-audio-player">
+        <!-- यहाँ अपने गाने का नाम डालें -->
+        <source src="Mymusic.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <!-- Audio Control Button -->
+    <div class="audio-controls" id="musicToggle">
+        <i class="fas fa-pause"></i>
+    </div>
+
+    <!-- Gun Controls Toggle -->
+    <div class="gun-controls-toggle" id="gunToggle">
+        <i class="fas fa-gun"></i>
+    </div>
+
+    <!-- Gun Selector UI -->
+    <div class="gun-selector" id="gunSelector">
+        <h4 style="color: var(--primary); margin-bottom: 10px; font-family: 'Orbitron';">
+            <i class="fas fa-crosshairs"></i> SELECT 3D GUNS
+        </h4>
+        <div class="gun-buttons">
+            <button class="gun-btn" data-gun="ak47">AK47</button>
+            <button class="gun-btn" data-gun="m4a1">M4A1</button>
+            <button class="gun-btn" data-gun="awp">AWP</button>
+            <button class="gun-btn" data-gun="shotgun">Shotgun</button>
+            <button class="gun-btn" data-gun="random">Random Mix</button>
+        </div>
+    </div>
+
+    <!-- 3D Guns Background -->
+    <canvas id="gun-canvas"></canvas>
+
+    <!-- Premium Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-cube"></i>
+            Aj Cheats 
+        </div>
+        <div class="nav-links">
+            <a href="#home">HOME</a>
+            <a href="#packages">PACKAGES</a>
+            <a href="#trust">SECURITY</a>
+            <a href="#contact">CONTACT</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content animate-on-scroll">
+            <h1>Android Advance hacks By AJ </h1>
+            <p>Fully Safe and Antiban hacks </p>
+            <a href="#packages" class="cta-button">
+                Explore Our Hacks
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Trust Section -->
+    <section class="trust-section" id="trust">
+        <div class="trust-grid">
+            <div class="trust-card animate-on-scroll">
+                <i class="fas fa-shield-check"></i>
+                <h3>Premuim</h3>
+                <p>No detection</p>
+            </div>
+            <div class="trust-card animate-on-scroll">
+                <i class="fas fa-server"></i>
+                <h3>Global Server Network</h3>
+                <p>Visuall office </p>
+            </div>
+            <div class="trust-card animate-on-scroll">
+                <i class="fas fa-users"></i>
+                <h3>Expert Team</h3>
+                <p>42 security researchers with 2+ years average experience</p>
+            </div>
+            <div class="trust-card animate-on-scroll">
+                <i class="fas fa-history"></i>
+                <h3>Continuous Updates</h3>
+                <p>Real-time adaptation to latest security protocols</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Packages Section -->
+    <section class="packages-section" id="packages">
+        <h2 class="section-title animate-on-scroll">ALL TYPES OF HACKS</h2>
+        <p class="section-subtitle animate-on-scroll">Advanced tools for game mechanics analysis (VIP)</p>
+        
+        <div class="packages-grid" id="packagesContainer">
+            <!-- ALL 10 PACKAGES WILL BE INSERTED HERE BY JAVASCRIPT -->
+        </div>
+    </section>
+
+    <!-- Social Section -->
+    <section class="social-section" id="contact">
+        <h2 class="section-title animate-on-scroll">CONNECT WITH RESEARCH TEAM</h2>
+        <p class="section-subtitle animate-on-scroll">Join our community of security researchers</p>
+        
+        <div class="social-grid">
+            <a href="https://www.instagram.com/ajwebs444?igsh=MXZ1dndteDNyanly" target="_blank" class="social-card instagram animate-on-scroll">
+                <i class="fab fa-instagram"></i>
+                <h3>Instagram</h3>
+                <p>@AJWEBS444</p>
+            </a>
+            <a href="https://t.me/+ewD71GjLUpc4N2Jl" target="_blank" class="social-card telegram animate-on-scroll">
+                <i class="fab fa-telegram"></i>
+                <h3>Telegram</h3>
+                <p>Official Channel AJ webs</p>
+            </a>
+            <a href="https://wa.me/917455025661" target="_blank" class="social-card whatsapp animate-on-scroll">
+                <i class="fab fa-whatsapp"></i>
+                <h3>WhatsApp</h3>
+                <p>Support Group</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="disclaimer animate-on-scroll">
+            <h3></i> AJ CHEATS 24/7 </h3>
+            <p>DEVELOPED BY OUR TEAM - AJWEBS</p>
+        </div>
+        <p class="animate-on-scroll">If you want, you can contact our team at this number and talk, but only those who want to make a purchase = +(91) 7455025661 </p>
+        <p class="animate-on-scroll" style="color: #888; margin-top: 1rem;">This simulation demonstrates professional web development techniques only.</p>
+    </footer>
+
+    <!-- Package Details Modal -->
+    <div class="modal" id="packageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">PACK DETAILS</h2>
+                <button class="close-modal" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 2rem;">
+                <!-- VIDEO CONTAINER (Will be dynamically filled) -->
+                <div id="videoContainer"></div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                    <div>
+                        <h3 style="font-family: 'Montserrat', sans-serif; margin-bottom: 1rem; color: var(--primary);">FEATURES</h3>
+                        <ul class="features" id="modalFeatures">
+                            <!-- Loaded by JS -->
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 style="font-family: 'Montserrat', sans-serif; margin-bottom: 1rem; color: var(--primary);">SECURITY PROTOCOLS</h3>
+                        <ul class="features">
+                            <li><i class="fas fa-lock"></i> Private hacks </li>
+                            <li><i class="fas fa-eye-slash"></i> Fully Safe time to Time Updated </li>
+                            <li><i class="fas fa-sync-alt"></i> Antiban </li>
+                            <li><i class="fas fa-shield-alt"></i> Anti-Detection</li>
+                            <li><i class="fas fa-history"></i> Freeze reports if someone reports you </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <button id="buyNowBtn" class="purchase-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    PURCHASE THIS PACKAGE
+                </button>
+                
+                <div style="background: rgba(255, 0, 85, 0.1); padding: 1.5rem; border-radius: 15px; border-left: 4px solid #ff0055; margin-top: 2rem;">
+                    <h4 style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        IMPORTANT NOTICE
+                    </h4>
+                    <p style="color: #ccc; font-size: 0.9rem;">
+                        Stay connected with us. As soon as a major update for the game comes out, use the updated panel and files and delete the old ones. 
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Purchase Modal -->
+    <div class="modal" id="purchaseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="purchaseModalTitle">PURCHASE PACKAGE</h2>
+                <button class="close-modal" id="closePurchaseModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="purchase-form">
+                <div class="form-group">
+                    <label for="userName"><i class="fas fa-user"></i> YOUR NAME</label>
+                    <input type="text" id="userName" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="selectedPackage"><i class="fas fa-box"></i> SELECTED PACKAGE</label>
+                    <input type="text" id="selectedPackage" readonly style="background: rgba(255, 255, 255, 0.03);">
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-info-circle"></i> PURCHASE INSTRUCTIONS</label>
+                    <div style="background: rgba(0, 247, 255, 0.05); padding: 1rem; border-radius: 10px; margin-top: 0.5rem;">
+                        <p style="color: #aaa; font-size: 0.9rem;">
+                            1. Fill your name above<br>
+                            2. Click "SEND TO WHATSAPP" button<br>
+                            3. You will be redirected to WhatsApp<br>
+                            4. Send the pre-filled message to complete purchase
+                        </p>
+                    </div>
+                </div>
+                
+                <button id="sendToWhatsappBtn" class="purchase-btn">
+                    <i class="fab fa-whatsapp"></i>
+                    SEND TO WHATSAPP
+                </button>
+                
+                <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                    <p style="color: #888; font-size: 0.9rem;">
+                        <i class="fas fa-shield-alt"></i> Your information is secure and will only be used for purchase processing
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // MUSIC AUTOPLAY FUNCTIONALITY
+        window.addEventListener('load', function() {
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            const musicToggle = document.getElementById('musicToggle');
+            
+            // Set initial volume (50%)
+            backgroundMusic.volume = 0.5;
+            
+            // Try to play music automatically
+            const playMusic = () => {
+                backgroundMusic.play().then(() => {
+                    console.log('🎵 Music started playing automatically');
+                    musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
+                }).catch(error => {
+                    console.log('Auto-play prevented by browser, user interaction required:', error);
+                    // Show play button
+                    musicToggle.innerHTML = '<i class="fas fa-play"></i>';
+                    musicToggle.style.display = 'flex';
+                    
+                    // Add click event to start music
+                    musicToggle.addEventListener('click', function firstClick() {
+                        backgroundMusic.play();
+                        musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
+                        console.log('🎵 Music started after user click');
+                        musicToggle.removeEventListener('click', firstClick);
+                    });
+                });
+            };
+            
+            // Start the music
+            playMusic();
+            
+            // Toggle play/pause on button click
+            musicToggle.addEventListener('click', function() {
+                if (backgroundMusic.paused) {
+                    backgroundMusic.play();
+                    this.innerHTML = '<i class="fas fa-pause"></i>';
+                } else {
+                    backgroundMusic.pause();
+                    this.innerHTML = '<i class="fas fa-play"></i>';
+                }
+            });
+        });
+
+        // 3D GUNS BACKGROUND
+        const gunScene = new THREE.Scene();
+        const gunCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const gunRenderer = new THREE.WebGLRenderer({ 
+            canvas: document.getElementById('gun-canvas'), 
+            alpha: true,
+            antialias: true 
+        });
+        
+        gunRenderer.setSize(window.innerWidth, window.innerHeight);
+        gunRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        gunRenderer.shadowMap.enabled = true;
+        gunRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+        gunScene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0x00f7ff, 0.5);
+        directionalLight.position.set(5, 5, 5);
+        directionalLight.castShadow = true;
+        gunScene.add(directionalLight);
+        
+        const pointLight = new THREE.PointLight(0xff0055, 0.3, 100);
+        pointLight.position.set(-5, -5, 5);
+        gunScene.add(pointLight);
+        
+        gunCamera.position.z = 15;
+        gunCamera.position.y = 5;
+        
+        // Array to store gun meshes
+        let guns = [];
+        let currentGunType = 'ak47';
+        
+        // Create gun geometry (simplified versions)
+        function createGunModel(type) {
+            let group = new THREE.Group();
+            
+            // Common gun parts
+            const barrel = new THREE.CylinderGeometry(0.1, 0.15, 3, 8);
+            const barrelMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x333333,
+                shininess: 100,
+                specular: 0x555555
+            });
+            const barrelMesh = new THREE.Mesh(barrel, barrelMaterial);
+            barrelMesh.rotation.x = Math.PI / 2;
+            barrelMesh.position.z = 1.5;
+            
+            const body = new THREE.BoxGeometry(0.5, 0.3, 1.5);
+            const bodyMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x222222,
+                shininess: 50
+            });
+            const bodyMesh = new THREE.Mesh(body, bodyMaterial);
+            
+            const grip = new THREE.BoxGeometry(0.3, 0.6, 0.3);
+            const gripMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x444444,
+                shininess: 30
+            });
+            const gripMesh = new THREE.Mesh(grip, gripMaterial);
+            gripMesh.position.y = -0.45;
+            gripMesh.position.z = -0.3;
+            
+            const magazine = new THREE.BoxGeometry(0.25, 0.8, 0.2);
+            const magazineMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x555555,
+                shininess: 80
+            });
+            const magazineMesh = new THREE.Mesh(magazine, magazineMaterial);
+            magazineMesh.position.y = -0.1;
+            magazineMesh.position.z = -0.6;
+            
+            // Gun type variations
+            if (type === 'ak47') {
+                barrelMaterial.color.setHex(0x8B4513); // Brown barrel
+                bodyMaterial.color.setHex(0x2F4F4F); // Dark slate gray
+                // Add AK47 characteristic parts
+                const gasTube = new THREE.CylinderGeometry(0.08, 0.08, 2, 6);
+                const gasTubeMesh = new THREE.Mesh(gasTube, barrelMaterial);
+                gasTubeMesh.rotation.x = Math.PI / 2;
+                gasTubeMesh.position.y = 0.2;
+                gasTubeMesh.position.z = 1;
+                group.add(gasTubeMesh);
+            } 
+            else if (type === 'm4a1') {
+                barrelMaterial.color.setHex(0x696969); // Dim gray
+                bodyMaterial.color.setHex(0x2F4F4F);
+                // Rail system
+                const rail = new THREE.BoxGeometry(0.6, 0.1, 2);
+                const railMesh = new THREE.Mesh(rail, bodyMaterial);
+                railMesh.position.y = 0.25;
+                railMesh.position.z = 0.8;
+                group.add(railMesh);
+            }
+            else if (type === 'awp') {
+                // Sniper rifle
+                const longBarrel = new THREE.CylinderGeometry(0.08, 0.12, 4, 8);
+                const longBarrelMesh = new THREE.Mesh(longBarrel, new THREE.MeshPhongMaterial({ 
+                    color: 0x8B7355,
+                    shininess: 100
+                }));
+                longBarrelMesh.rotation.x = Math.PI / 2;
+                longBarrelMesh.position.z = 2;
+                group.add(longBarrelMesh);
+                
+                bodyMaterial.color.setHex(0x556B2F); // Dark olive green
+                gripMaterial.color.setHex(0x8B4513);
+            }
+            else if (type === 'shotgun') {
+                // Shotgun
+                const doubleBarrel = new THREE.CylinderGeometry(0.15, 0.2, 2.5, 8);
+                const doubleBarrelMesh = new THREE.Mesh(doubleBarrel, new THREE.MeshPhongMaterial({ 
+                    color: 0x8B4513,
+                    shininess: 80
+                }));
+                doubleBarrelMesh.rotation.x = Math.PI / 2;
+                doubleBarrelMesh.position.z = 1.25;
+                group.add(doubleBarrelMesh);
+                
+                bodyMaterial.color.setHex(0x654321); // Dark brown
+            }
+            
+            // Add common parts
+            group.add(barrelMesh);
+            group.add(bodyMesh);
+            group.add(gripMesh);
+            group.add(magazineMesh);
+            
+            // Add glow effect
+            const glowGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+            const glowMaterial = new THREE.MeshBasicMaterial({
+                color: Math.random() > 0.5 ? 0x00f7ff : 0xff0055,
+                transparent: true,
+                opacity: 0.3
+            });
+            const glowMesh = new THREE.Mesh(glowGeometry, glowMaterial);
+            glowMesh.position.set(
+                (Math.random() - 0.5) * 1.5,
+                (Math.random() - 0.5) * 1.5,
+                (Math.random() - 0.5) * 1.5
+            );
+            group.add(glowMesh);
+            
+            group.userData = { 
+                type: type,
+                rotationSpeed: {
+                    x: (Math.random() - 0.5) * 0.01,
+                    y: (Math.random() - 0.5) * 0.01,
+                    z: (Math.random() - 0.5) * 0.01
+                },
+                floatSpeed: Math.random() * 0.005 + 0.002,
+                floatOffset: Math.random() * Math.PI * 2
+            };
+            
+            return group;
+        }
+        
+        // Create floating guns
+        function createGuns(type = 'ak47', count = 15) {
+            // Clear existing guns
+            guns.forEach(gun => gunScene.remove(gun));
+            guns = [];
+            
+            // Create new guns
+            for (let i = 0; i < count; i++) {
+                let gunType = type;
+                if (type === 'random') {
+                    const types = ['ak47', 'm4a1', 'awp', 'shotgun'];
+                    gunType = types[Math.floor(Math.random() * types.length)];
+                }
+                
+                const gun = createGunModel(gunType);
+                
+                // Random position
+                gun.position.x = (Math.random() - 0.5) * 40;
+                gun.position.y = (Math.random() - 0.5) * 40;
+                gun.position.z = (Math.random() - 0.5) * 40;
+                
+                // Random rotation
+                gun.rotation.x = Math.random() * Math.PI;
+                gun.rotation.y = Math.random() * Math.PI;
+                gun.rotation.z = Math.random() * Math.PI;
+                
+                // Random scale
+                const scale = Math.random() * 0.8 + 0.4;
+                gun.scale.set(scale, scale, scale);
+                
+                gunScene.add(gun);
+                guns.push(gun);
+            }
+        }
+        
+        // Animate guns
+        function animateGuns() {
+            requestAnimationFrame(animateGuns);
+            
+            guns.forEach((gun, i) => {
+                // Rotate
+                gun.rotation.x += gun.userData.rotationSpeed.x;
+                gun.rotation.y += gun.userData.rotationSpeed.y;
+                gun.rotation.z += gun.userData.rotationSpeed.z;
+                
+                // Float up and down
+                gun.position.y += Math.sin(Date.now() * gun.userData.floatSpeed + gun.userData.floatOffset) * 0.005;
+                
+                // Slow horizontal movement
+                gun.position.x += Math.cos(Date.now() * gun.userData.floatSpeed * 0.5 + i) * 0.003;
+                gun.position.z += Math.sin(Date.now() * gun.userData.floatSpeed * 0.5 + i) * 0.003;
+                
+                // Keep guns in bounds
+                if (gun.position.x > 25) gun.position.x = -25;
+                if (gun.position.x < -25) gun.position.x = 25;
+                if (gun.position.z > 25) gun.position.z = -25;
+                if (gun.position.z < -25) gun.position.z = 25;
+                
+                // Slowly rotate camera for dynamic view
+                gunCamera.position.x = Math.sin(Date.now() * 0.0005) * 20;
+                gunCamera.position.z = Math.cos(Date.now() * 0.0005) * 20;
+                gunCamera.lookAt(0, 0, 0);
+            });
+            
+            gunRenderer.render(gunScene, gunCamera);
+        }
+        
+        // Initialize guns
+        createGuns('ak47', 20);
+        animateGuns();
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            gunCamera.aspect = window.innerWidth / window.innerHeight;
+            gunCamera.updateProjectionMatrix();
+            gunRenderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // Gun selector functionality
+        const gunToggle = document.getElementById('gunToggle');
+        const gunSelector = document.getElementById('gunSelector');
+        const gunButtons = document.querySelectorAll('.gun-btn');
+        
+        gunToggle.addEventListener('click', () => {
+            gunSelector.style.display = gunSelector.style.display === 'block' ? 'none' : 'block';
+        });
+        
+        gunButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const gunType = btn.getAttribute('data-gun');
+                currentGunType = gunType;
+                createGuns(gunType, gunType === 'random' ? 25 : 20);
+                
+                // Update button active state
+                gunButtons.forEach(b => b.style.background = 'rgba(0, 247, 255, 0.1)');
+                btn.style.background = 'var(--primary)';
+                btn.style.color = '#000';
+                
+                console.log(`🔫 Switched to ${gunType.toUpperCase()} guns`);
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // 🔥 **COMPLETE 10 PACKAGES WITH VIDEO IDs - यहाँ अपने IDs डालो!**
+        const packages = [
+            {
+                id: 1,
+                name: "Sensitivity Pack",
+                videoId: "4KfV6rkGOLc", // 🔴 यहाँ अपना YouTube video ID डालो
+                features: [
+                    "Boost Game performence ",
+                    "high sensi with Aim cantrol",
+                    "Fast Movement ",
+                    "Aim Staibiliser ",
+                    "Cemra Angle fix"
+                ]
+            },
+            {
+                id: 2,
+                name: "20% Drag Headshot (Fully Safe and Antiban )",
+                videoId: "gJFAJjBNIIg",
+                features: [
+                    "Drag Headshot ",
+                    "Fix Aim ",
+                    "Less Recoil ",
+                    "Sensitivity fix ",
+                    "5 % Aimlock "
+                ]
+            },
+            {
+                id: 3,
+                name: "40% Drag + less Hologram ( Fully Safe and Antiban )",
+                videoId: "G_yGWfIwKWM",
+                features: [
+                    "Easy Drag headshot ",
+                    "Recoil Cantroled",
+                    "Hologram in some dresses ",
+                    "10% Aimlock",
+                    "Aim fix "
+                ]
+            },
+            {
+                id: 4,
+                name: "60% Drag + Hologram ( Fully Safe and Antiban )",
+                videoId: "mfTZmLdbZbY",
+                features: [
+                    "Easy drag headshot ",
+                    "Hologram and location ",
+                    "Recoil cantrol with sensi",
+                    "15% Aimlock ",
+                    "Aim staible and fix "
+                ]
+            },
+            {
+                id: 5,
+                name: "Location ( Fully Safe and Antiban )",
+                videoId: "YOUR_VIDEO_ID_5_HERE", 
+                features: [
+                    "Enemy location ",
+                    "Enable enemy tracing ",
+                    "hologram also enabled ",
+                    "Location detected ",
+                    "Fully safe"
+                ]
+            },
+            {
+                id: 6,
+                name: "10 Years Ban fix ( Fully Safe and Antiban )",
+                videoId: "YOUR_VIDEO_ID_6_HERE", // 🔴 यहाँ अपना YouTube video ID डालो
+                features: [
+                    "Unban old free fire Id ",
+                    "No detection ",
+                    "You need to do some setup ",
+                    "Fully Id Recover ",
+                    "Completely working "
+                ]
+            },
+            {
+                id: 7,
+                name: "100% Body-to-Headshot Converter ( Fully Safe and Antiban )",
+                videoId: "COwRmZBuwhM", // 🔴 यहाँ अपना YouTube video ID डालो
+                features: [
+                    "No Drag ",
+                    "Body Heeadshot ",
+                    "Tap on the fire button and headshot without drag ",
+                    "No black screen problem ",
+                    "No detection "
+                ]
+            },
+            {
+                id: 8,
+                name: "Android Premium Panel APK ( Fully Safe and Antiban )",
+                videoId: "-RjOW7p3TKE", // 🔴 यहाँ अपना YouTube video ID डालो
+                features: [
+                    "APK Pannel ",
+                    "Just install Application and enable features ",
+                    "Many Features like Headshot , No recoil , Neck headshot etc ..",
+                    "Fully Antiban Also have bypass features ",
+                    "No detection on Streaming "
+                ]
+            },
+            {
+                id: 9,
+                name: "Recoil Control + 10% Headshot ( Fully Safe and Antiban )",
+                videoId: "VooS70bmvsQ", // 🔴 यहाँ अपना YouTube video ID डालो
+                features: [
+                    "90% No recoil ",
+                    "drag headshot ",
+                    "Fix Cemra Angle ",
+                    "Smg guns also work in long range ",
+                    "No detection"
+                ]
+            },
+            {
+                id: 10,
+                name: "Advanced Bypass ( Fully Safe and Antiban )",
+                videoId: "KEMIiB6dIB0", 
+                features: [
+                    "No Id ban ",
+                    "If you use bigger types of hacks, your ID will just get blacklisted",
+                    "Permanent account protection",
+                    "No Detection after using hacks also ",
+                    "No report work "
+                ]
+            }
+        ];
+
+        // Load ALL 10 packages
+        const packagesContainer = document.getElementById('packagesContainer');
+        let currentSelectedPackage = null;
+        
+        packages.forEach((pkg, index) => {
+            const card = document.createElement('div');
+            card.className = 'package-card animate-on-scroll';
+            card.innerHTML = `
+                <div class="package-header">
+                    <div class="package-number">${String(index + 1).padStart(2, '0')}</div>
+                    <h3 class="package-title">${pkg.name}</h3>
+                </div>
+                <div class="package-content">
+                    <ul class="features">
+                        ${pkg.features.slice(0, 3).map(f => `<li><i class="fas fa-microchip"></i> ${f}</li>`).join('')}
+                    </ul>
+                    <button class="package-btn" data-id="${pkg.id}">
+                        <i class="fas fa-search"></i>
+                        VIEW PACKAGE DETAILS
+                    </button>
+                </div>
+            `;
+            packagesContainer.appendChild(card);
+        });
+
+        // Function to create video player HTML
+        function createVideoPlayer(videoId, packageName) {
+            if (videoId && videoId.trim() !== "" && videoId !== "YOUR_VIDEO_ID_1_HERE") {
+                // YouTube video player
+                return `
+                    <div class="video-container">
+                        <div class="video-header">
+                            <i class="fas fa-play-circle"></i>
+                            <h3>PACKAGE DEMONSTRATION VIDEO</h3>
+                        </div>
+                        <div class="youtube-player">
+                            <iframe 
+                                src="https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&autoplay=0&controls=1&showinfo=0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                                title="${packageName} Demo Video">
+                            </iframe>
+                        </div>
+                        <p style="color: #888; text-align: center; margin-top: 1rem; font-size: 0.9rem;">
+                            ${packageName} - Live Demonstration
+                        </p>
+                    </div>
+                `;
+            } else {
+                // Placeholder if no video ID
+                return `
+                    <div class="video-container">
+                        <div class="video-header">
+                            <i class="fas fa-play-circle"></i>
+                            <h3>PACKAGE DEMONSTRATION VIDEO</h3>
+                        </div>
+                        <div class="video-placeholder">
+                            <div class="play-icon">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <p style="color: #888; text-align: center;">
+                                Add YouTube Video for ${packageName}<br>
+                                <small style="color: #666;">Upload video and add videoId above</small>
+                            </p>
+                        </div>
+                        <p style="color: #888; text-align: center; margin-top: 1rem; font-size: 0.9rem;">
+                            ${packageName} - Demo Available Soon
+                        </p>
+                    </div>
+                `;
+            }
+        }
+
+        // Modal functionality
+        const packageModal = document.getElementById('packageModal');
+        const purchaseModal = document.getElementById('purchaseModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalFeatures = document.getElementById('modalFeatures');
+        const videoContainer = document.getElementById('videoContainer');
+        const closeModalBtn = document.getElementById('closeModal');
+        const buyNowBtn = document.getElementById('buyNowBtn');
+        const closePurchaseModalBtn = document.getElementById('closePurchaseModal');
+        const purchaseModalTitle = document.getElementById('purchaseModalTitle');
+        const selectedPackageInput = document.getElementById('selectedPackage');
+        const userNameInput = document.getElementById('userName');
+        const sendToWhatsappBtn = document.getElementById('sendToWhatsappBtn');
+        
+        // Open package details modal
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.package-btn')) {
+                const packageId = parseInt(e.target.closest('.package-btn').getAttribute('data-id'));
+                const selectedPackage = packages.find(p => p.id === packageId);
+                currentSelectedPackage = selectedPackage;
+                
+                // Update modal content
+                modalTitle.textContent = selectedPackage.name;
+                modalFeatures.innerHTML = selectedPackage.features
+                    .map(f => `<li><i class="fas fa-check-circle"></i> ${f}</li>`)
+                    .join('');
+                
+                // Update video container
+                videoContainer.innerHTML = createVideoPlayer(selectedPackage.videoId, selectedPackage.name);
+                
+                packageModal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        });
+        
+        // Buy Now button in package modal
+        buyNowBtn.addEventListener('click', () => {
+            packageModal.style.display = 'none';
+            purchaseModal.style.display = 'block';
+            purchaseModalTitle.textContent = `Purchase: ${currentSelectedPackage.name}`;
+            selectedPackageInput.value = currentSelectedPackage.name;
+            userNameInput.focus();
+        });
+        
+        // Send to WhatsApp function
+        sendToWhatsappBtn.addEventListener('click', () => {
+            const userName = userNameInput.value.trim();
+            const packageName = currentSelectedPackage.name;
+            
+            if (!userName) {
+                alert('Please enter your name first!');
+                userNameInput.focus();
+                return;
+            }
+            
+            // Create WhatsApp message
+            const message = `Hello AJ Cheats Team!%0A%0A`
+                + `I want to purchase a package:%0A`
+                + `Name: ${userName}%0A`
+                + `Package: ${packageName}%0A%0A`
+                + `Please guide me through the purchase process.`;
+            
+            // Your WhatsApp number
+            const whatsappNumber = '917455025661';
+            
+            // Open WhatsApp with pre-filled message
+            window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+            
+            // Close modal after 1 second
+            setTimeout(() => {
+                purchaseModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                userNameInput.value = '';
+            }, 1000);
+        });
+        
+        // Close modals
+        closeModalBtn.addEventListener('click', () => {
+            packageModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        closePurchaseModalBtn.addEventListener('click', () => {
+            purchaseModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === packageModal) {
+                packageModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+            if (e.target === purchaseModal) {
+                purchaseModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                if (this.getAttribute('href') === '#') return;
+                
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Console welcome message
+        console.log('%c🔐 Aj Cheats - Premium Hacks', 'color: #00f7ff; font-size: 18px; font-weight: bold;');
+        console.log('%c✅ ALL 10 PACKAGES LOADED & FUNCTIONAL', 'color: #00ff00; font-weight: bold;');
+        console.log('%c🎵 BACKGROUND MUSIC: ENABLED', 'color: #ff00ff;');
+        console.log('%c🎥 PACKAGE VIDEOS: READY TO ADD', 'color: #ff5500; font-weight: bold;');
+        console.log('%c📱 WhatsApp Purchase Flow: ENABLED', 'color: #25D366;');
+        console.log('%c💡 HOW TO ADD VIDEOS:', 'color: #00f7ff; font-weight: bold;');
+        console.log('1. Upload 10 videos to YouTube (Unlisted)');
+        console.log('2. Get video ID from URL (after v=)');
+        console.log('3. Replace "YOUR_VIDEO_ID_1_HERE" with actual IDs');
+        console.log('4. Save and refresh page');
+        
+        window.addEventListener('load', () => {
+            console.log(`🎮 Total Packages: ${packages.length}`);
+            console.log('🚀 Website is fully functional!');
+            console.log('📹 Add your YouTube video IDs to show videos');
+        });
+    </script>
+</body>
+</html>
